@@ -21,24 +21,16 @@
       </div>
       <hr class="my-6" />
       <!-- Progess Bars -->
-      <div class="mb-4">
+      <div class="mb-4" v-for="upload in uploads" :key="upload.name">
         <!-- File Name -->
-        <div class="font-bold text-sm">Just another song.mp3</div>
+        <div class="font-bold text-sm">{{ upload.name }}</div>
         <div class="flex h-4 overflow-hidden bg-gray-200 rounded">
           <!-- Inner Progress Bar -->
-          <div class="transition-all progress-bar bg-blue-400" style="width: 75%"></div>
-        </div>
-      </div>
-      <div class="mb-4">
-        <div class="font-bold text-sm">Just another song.mp3</div>
-        <div class="flex h-4 overflow-hidden bg-gray-200 rounded">
-          <div class="transition-all progress-bar bg-blue-400" style="width: 35%"></div>
-        </div>
-      </div>
-      <div class="mb-4">
-        <div class="font-bold text-sm">Just another song.mp3</div>
-        <div class="flex h-4 overflow-hidden bg-gray-200 rounded">
-          <div class="transition-all progress-bar bg-blue-400" style="width: 55%"></div>
+          <div
+            class="transition-all progress-bar bg-blue-400"
+            :style="{ width: `${upload.currentProgress}%` }"
+            :class="'bg-blue-400'"
+          ></div>
         </div>
       </div>
     </div>
@@ -51,19 +43,27 @@ export default {
   name: 'MusicUpload',
   data() {
     return {
-      isDraggedover: false
+      isDraggedover: false,
+      uploads: []
     };
   },
   methods: {
     upload(e) {
       const files = [...e.dataTransfer.files];
       files.forEach((file) => {
-        if (file.type !== 'autio/mp3') return;
+        if (file.type !== 'audio/mpeg') return;
 
         const storageRef = storage.ref();
         const songsRef = storageRef.child(`songs/${file.name}`);
 
-        songsRef.put(file);
+        const task = songsRef.put(file);
+
+        const uploadIndex = this.uploads.push({ task, currentProgress: 0, name: file.name }) - 1;
+
+        task.on('state_changed', (snapshot) => {
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          this.uploads[uploadIndex].currentProgress = progress;
+        }); 
       });
       this.isDraggedover = false;
     }
