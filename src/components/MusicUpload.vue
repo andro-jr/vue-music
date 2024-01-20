@@ -23,13 +23,16 @@
       <!-- Progess Bars -->
       <div class="mb-4" v-for="upload in uploads" :key="upload.name">
         <!-- File Name -->
-        <div class="font-bold text-sm">{{ upload.name }}</div>
+
+        <div class="font-bold text-sm" :class="upload.textClass">
+          <i :class="upload.icon" style="margin-right: 5px"></i>{{ upload.name }}
+        </div>
         <div class="flex h-4 overflow-hidden bg-gray-200 rounded">
           <!-- Inner Progress Bar -->
           <div
-            class="transition-all progress-bar bg-blue-400"
+            class="transition-all progress-bar"
             :style="{ width: `${upload.currentProgress}%` }"
-            :class="'bg-blue-400'"
+            :class="upload.variant"
           ></div>
         </div>
       </div>
@@ -58,12 +61,34 @@ export default {
 
         const task = songsRef.put(file);
 
-        const uploadIndex = this.uploads.push({ task, currentProgress: 0, name: file.name }) - 1;
+        const uploadIndex =
+          this.uploads.push({
+            task,
+            currentProgress: 0,
+            name: file.name,
+            variant: 'bg-blue-400',
+            icon: 'fas fa-spinner fa-spin',
+            textClass: ''
+          }) - 1;
 
-        task.on('state_changed', (snapshot) => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          this.uploads[uploadIndex].currentProgress = progress;
-        }); 
+        task.on(
+          'state_changed',
+          (snapshot) => {
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            this.uploads[uploadIndex].currentProgress = progress;
+          },
+          (error) => {
+            this.uploads[uploadIndex].variant = 'bg-red-400';
+            this.uploads[uploadIndex].icon = 'fas fa-times';
+            this.uploads[uploadIndex].textClass = 'text-red-400';
+            console.log(error);
+          },
+          () => {
+            this.uploads[uploadIndex].variant = 'bg-green-400';
+            this.uploads[uploadIndex].icon = 'fas fa-check';
+            this.uploads[uploadIndex].textClass = 'text-green-400';
+          }
+        );
       });
       this.isDraggedover = false;
     }
