@@ -19,6 +19,7 @@
       >
         <h5>Drop your files here</h5>
       </div>
+      <input type="file" name="" id="" multiple @change="upload" />
       <hr class="my-6" />
       <!-- Progess Bars -->
       <div class="mb-4" v-for="upload in uploads" :key="upload.name">
@@ -52,7 +53,7 @@ export default {
   },
   methods: {
     upload(e) {
-      const files = [...e.dataTransfer.files];
+      const files = e.dataTransfer ? [...e.dataTransfer.files] : [...e.target.files];
       files.forEach((file) => {
         if (file.type !== 'audio/mpeg') return;
 
@@ -104,6 +105,11 @@ export default {
       });
       this.isDraggedover = false;
     }
+  },
+  beforeUnmount() {
+    this.uploads.forEach((upload) => {
+      upload.task.cancel();
+    });
   }
 };
 </script>
