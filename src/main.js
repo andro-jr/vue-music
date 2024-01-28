@@ -9,6 +9,8 @@ import { createPinia } from 'pinia';
 import App from './App.vue';
 import router from './router';
 
+import icon from './directives/icon';
+
 let app;
 
 auth.onAuthStateChanged(() => {
@@ -18,6 +20,7 @@ auth.onAuthStateChanged(() => {
     app.use(createPinia());
     app.use(router);
     app.use(VeeValidatePlugin);
+    app.directive('icon', icon);
 
     app.mount('#app');
   }
