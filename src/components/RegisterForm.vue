@@ -85,7 +85,9 @@
         class="w-4 h-4 float-left -ml-6 mt-1 rounded"
         value="1"
       />
-      <label class="inline-block">Accept terms of service</label>
+      <i18n-t class="inline-block" keypath="register.accept" tag="label"
+        ><a href="github.com">{{ $t('register.tos') }}</a></i18n-t
+      >
       <br />
       <ErrorMessage class="text-red-600" name="tos" />
     </div>
