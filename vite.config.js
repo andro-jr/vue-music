@@ -12,6 +12,15 @@ export default defineConfig({
       registerType: 'autoUpdate',
       devOptions: {
         enabled: true
+      },
+      manifest: {
+        name: 'Music App',
+        theme_color: '#ff53ea',
+        icons: [{ src: 'assets/img/pwa-192x192.png', sizes: '192x192', type: 'image/png' }]
+      },
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,png,jpg,}'],
+        globIgnores: ['assets/img/pwa-192x192.png']
       }
     })
   ],
