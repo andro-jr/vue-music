@@ -1,1 +1,5 @@
-<template>about</template>
+<template>
+  about
+
+  <BasePrimaryButton />
+</template>
