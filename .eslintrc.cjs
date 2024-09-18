@@ -12,18 +12,18 @@ module.exports = {
     {
       files: ['cypress/e2e/**/*.{cy,spec}.{js,ts,jsx,tsx}', 'cypress/support/**/*.{js,ts,jsx,tsx}'],
       extends: ['plugin:cypress/recommended']
-    },
-    {
-      files: ['src/components/__tests__/**.spec.js'],
-      globals: {
-        test: 'readonly',
-        describe: 'readonly',
-        expect: 'readonly',
-        vi: 'readonly',
-        beforeEach: 'readonly',
-        it: 'readonly'
-      }
     }
+    // {
+    //   files: ['src/components/__tests__/**.spec.js'],
+    //   globals: {
+    //     test: 'readonly',
+    //     describe: 'readonly',
+    //     expect: 'readonly',
+    //     vi: 'readonly',
+    //     beforeEach: 'readonly',
+    //     it: 'readonly'
+    //   }
+    // }
   ],
   parserOptions: {
     ecmaVersion: 'latest'
