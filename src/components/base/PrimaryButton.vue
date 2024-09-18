@@ -1,3 +1,3 @@
 <template>
-  <button>PRess ME</button>
+  <button>Press ME</button>
 </template>
